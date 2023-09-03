@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "333432310181",
+    "project_id": "firstnotes-learning-project123",
+    "storage_bucket": "firstnotes-learning-project123.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:333432310181:android:c60bb5341f9a318b10c04c",
+        "android_client_info": {
+          "package_name": "com.example.secondnotes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "333432310181-gbkj5j3o6rc2kp9to7eka9ohi8qq5bjv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGZ7JxJyMsDd3vSrZUmTO3sIj59iyAs3c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "333432310181-gbkj5j3o6rc2kp9to7eka9ohi8qq5bjv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "333432310181-oup5l62o9goascut31kgjrosnarot8eq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "makestuffup.firstnotes"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:333432310181:android:c20744f86fec5abb10c04c",
+        "android_client_info": {
+          "package_name": "makestuffup.firstnotes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "333432310181-gbkj5j3o6rc2kp9to7eka9ohi8qq5bjv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGZ7JxJyMsDd3vSrZUmTO3sIj59iyAs3c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "333432310181-gbkj5j3o6rc2kp9to7eka9ohi8qq5bjv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "333432310181-oup5l62o9goascut31kgjrosnarot8eq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "makestuffup.firstnotes"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
