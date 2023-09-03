@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,15 +49,6 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyA3Z4Krjjx5owfdNYdmkjHZzSCzDSoR3FY',
-    appId: '1:333432310181:web:100d9ac6d2d1281d10c04c',
-    messagingSenderId: '333432310181',
-    projectId: 'firstnotes-learning-project123',
-    authDomain: 'firstnotes-learning-project123.firebaseapp.com',
-    storageBucket: 'firstnotes-learning-project123.appspot.com',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBGZ7JxJyMsDd3vSrZUmTO3sIj59iyAs3c',
     appId: '1:333432310181:android:c60bb5341f9a318b10c04c',
@@ -68,15 +65,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'firstnotes-learning-project123.appspot.com',
     iosClientId: '333432310181-i8072br28nfh4vovu6b59rrg16g90ifi.apps.googleusercontent.com',
     iosBundleId: 'com.example.secondnotes',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBzrNsQcMY_PF4-PRZScr2RsBrlGQW8KHU',
-    appId: '1:333432310181:ios:dbea45a1aa09c7fd10c04c',
-    messagingSenderId: '333432310181',
-    projectId: 'firstnotes-learning-project123',
-    storageBucket: 'firstnotes-learning-project123.appspot.com',
-    iosClientId: '333432310181-petdp1sqqs58a80rrveva4b09fkkj86j.apps.googleusercontent.com',
-    iosBundleId: 'com.example.secondnotes.RunnerTests',
   );
 }
