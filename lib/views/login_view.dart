@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'dart:developer' as devtools show log;
+
+import 'package:secondnotes/constants/routes.dart';
+import 'package:secondnotes/utilities/error_dialog.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -55,13 +57,25 @@ class _LoginViewState extends State<LoginView> {
                       email: email, password: password);
                   if (context.mounted) {
                     Navigator.of(context)
-                        .pushNamedAndRemoveUntil('/notes/', (route) => false);
+                        .pushNamedAndRemoveUntil(notesRoute, (route) => false);
                   }
                 } on FirebaseAuthException catch (e) {
                   if (e.code == 'user-not-found') {
-                    devtools.log('No such user');
+                    if (context.mounted) {
+                      await showErrorDialog(context, 'User not found Please');
+                    }
                   } else if (e.code == 'wrong-password') {
-                    devtools.log('Wrong password');
+                    if (context.mounted) {
+                      await showErrorDialog(context, 'Wrong credentials');
+                    }
+                  } else {
+                    if (context.mounted) {
+                      await showErrorDialog(context, 'Error: ${e.code}');
+                    }
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    await showErrorDialog(context, e.toString());
                   }
                 }
               },
@@ -69,7 +83,7 @@ class _LoginViewState extends State<LoginView> {
           TextButton(
               onPressed: () async {
                 Navigator.of(context)
-                    .pushNamedAndRemoveUntil('/register/', (route) => false);
+                    .pushNamedAndRemoveUntil(registerRoute, (route) => false);
               },
               child: const Text('Do not have an account? Register here')),
         ],

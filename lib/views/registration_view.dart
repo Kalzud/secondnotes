@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'dart:developer' as devtools show log;
+
+import 'package:secondnotes/constants/routes.dart';
+import 'package:secondnotes/utilities/error_dialog.dart';
 
 class RegistrationView extends StatefulWidget {
   const RegistrationView({super.key});
@@ -51,17 +53,35 @@ class _RegistrationViewState extends State<RegistrationView> {
                 try {
                   final email = _email.text;
                   final password = _password.text;
-                  final usercredential = await FirebaseAuth.instance
-                      .createUserWithEmailAndPassword(
-                          email: email, password: password);
-                  devtools.log(usercredential.toString());
+                  await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                      email: email, password: password);
+                  final user = FirebaseAuth.instance.currentUser;
+                  await user?.sendEmailVerification();
+                  if (context.mounted) {
+                    Navigator.of(context).pushNamed(verifyRoute);
+                  }
                 } on FirebaseAuthException catch (e) {
                   if (e.code == 'invalid-email') {
-                    devtools.log('Email is invalid');
+                    if (context.mounted) {
+                      await showErrorDialog(context, 'Invalid email');
+                    }
                   } else if (e.code == 'email-already-in-use') {
-                    devtools.log('email taken');
+                    if (context.mounted) {
+                      await showErrorDialog(context, 'Email already taken');
+                    }
                   } else if (e.code == 'weak-password') {
-                    devtools.log('weak password');
+                    if (context.mounted) {
+                      await showErrorDialog(
+                          context, 'Weak password at least 6 characters');
+                    }
+                  } else {
+                    if (context.mounted) {
+                      await showErrorDialog(context, 'Error: ${e.code}');
+                    }
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    await showErrorDialog(context, e.toString());
                   }
                 }
               },
@@ -69,7 +89,7 @@ class _RegistrationViewState extends State<RegistrationView> {
           TextButton(
               onPressed: () async {
                 Navigator.of(context)
-                    .pushNamedAndRemoveUntil('/login/', (route) => false);
+                    .pushNamedAndRemoveUntil(loginRoute, (route) => false);
               },
               child: const Text('Aready have an account? Login here')),
         ],
