@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:secondnotes/firebase_options.dart';
+import 'dart:developer' as devtools show log;
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -31,55 +30,50 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Login'),
-          backgroundColor: Colors.deepPurple,
-        ),
-        body: FutureBuilder(
-          future: Firebase.initializeApp(
-            options: DefaultFirebaseOptions.currentPlatform,
+      appBar: AppBar(
+        title: const Text('Login'),
+        backgroundColor: Colors.deepPurple,
+      ),
+      body: Column(
+        children: [
+          TextField(
+            controller: _email,
+            keyboardType: TextInputType.emailAddress,
+            decoration: const InputDecoration(hintText: 'Enter email here'),
           ),
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.done:
-                return Column(
-                  children: [
-                    TextField(
-                      controller: _email,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration:
-                          const InputDecoration(hintText: 'Enter email here'),
-                    ),
-                    TextField(
-                      controller: _password,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                          hintText: 'Enter Password here'),
-                    ),
-                    TextButton(
-                        onPressed: () async {
-                          try {
-                            final email = _email.text;
-                            final password = _password.text;
-                            final usercredential = await FirebaseAuth.instance
-                                .signInWithEmailAndPassword(
-                                    email: email, password: password);
-                            print(usercredential);
-                          } on FirebaseAuthException catch (e) {
-                            if (e.code == 'user-not-found') {
-                              print('No such user');
-                            } else if (e.code == 'wrong-password') {
-                              print('Wrong password');
-                            }
-                          }
-                        },
-                        child: const Text('Login'))
-                  ],
-                );
-              default:
-                return const Text('Loading......');
-            }
-          },
-        ));
+          TextField(
+            controller: _password,
+            obscureText: true,
+            decoration: const InputDecoration(hintText: 'Enter Password here'),
+          ),
+          TextButton(
+              onPressed: () async {
+                try {
+                  final email = _email.text;
+                  final password = _password.text;
+                  await FirebaseAuth.instance.signInWithEmailAndPassword(
+                      email: email, password: password);
+                  if (context.mounted) {
+                    Navigator.of(context)
+                        .pushNamedAndRemoveUntil('/notes/', (route) => false);
+                  }
+                } on FirebaseAuthException catch (e) {
+                  if (e.code == 'user-not-found') {
+                    devtools.log('No such user');
+                  } else if (e.code == 'wrong-password') {
+                    devtools.log('Wrong password');
+                  }
+                }
+              },
+              child: const Text('Login')),
+          TextButton(
+              onPressed: () async {
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil('/register/', (route) => false);
+              },
+              child: const Text('Do not have an account? Register here')),
+        ],
+      ),
+    );
   }
 }
