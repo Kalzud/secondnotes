@@ -40,11 +40,15 @@ class _RegistrationViewState extends State<RegistrationView> {
         children: [
           TextField(
             controller: _email,
+            enableSuggestions: false,
+            autocorrect: false,
             keyboardType: TextInputType.emailAddress,
             decoration: const InputDecoration(hintText: 'Enter email here'),
           ),
           TextField(
             controller: _password,
+            enableSuggestions: false,
+            autocorrect: false,
             obscureText: true,
             decoration: const InputDecoration(hintText: 'Enter Password here'),
           ),
