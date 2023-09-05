@@ -7,6 +7,9 @@ import 'package:secondnotes/views/login_view.dart';
 import 'package:secondnotes/views/registration_view.dart';
 import 'package:secondnotes/views/verify_email_view.dart';
 
+//main method , the async in front of the bracket
+//means it follows the function inside the method line
+//by line not simuteanously
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
@@ -102,6 +105,7 @@ class _NoteViewState extends State<NoteView> {
   }
 }
 
+//future: so we are promising dart a value here
 Future<bool> showLogoutDialog(BuildContext context) {
   return showDialog<bool>(
       context: context,
@@ -122,5 +126,9 @@ Future<bool> showLogoutDialog(BuildContext context) {
                 child: const Text('Cancel')),
           ],
         );
-      }).then((value) => value ?? false);
+      }
+      //we are saying if there is no value
+      //gotten from the above function since
+      //we promised you a value take false as value
+      ).then((value) => value ?? false);
 }

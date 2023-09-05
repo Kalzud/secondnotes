@@ -1,6 +1,7 @@
+//External imports
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+//Internal imports
 import 'package:secondnotes/constants/routes.dart';
 import 'package:secondnotes/utilities/error_dialog.dart';
 
@@ -15,6 +16,7 @@ class _LoginViewState extends State<LoginView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
 
+  //initialise the controllers
   @override
   void initState() {
     _email = TextEditingController();
@@ -22,6 +24,7 @@ class _LoginViewState extends State<LoginView> {
     super.initState();
   }
 
+  //dispose of controller data after so it can be refilled
   @override
   void dispose() {
     _email.dispose();
@@ -31,6 +34,8 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+    //Scaffold is the contxt or canvas the user sees
+    //on screen without it would be a blank black screen
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login'),
