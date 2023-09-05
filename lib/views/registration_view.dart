@@ -1,8 +1,9 @@
 //External import
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 //Internal import
 import 'package:secondnotes/constants/routes.dart';
+import 'package:secondnotes/services/auth/auth_exception.dart';
+import 'package:secondnotes/services/auth/auth_service.dart';
 import 'package:secondnotes/utilities/error_dialog.dart';
 
 class RegistrationView extends StatefulWidget {
@@ -62,36 +63,21 @@ class _RegistrationViewState extends State<RegistrationView> {
                 try {
                   final email = _email.text;
                   final password = _password.text;
-                  await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                      email: email, password: password);
-                  final user = FirebaseAuth.instance.currentUser;
-                  await user?.sendEmailVerification();
+                  AuthService.firebase()
+                      .createUser(email: email, password: password);
+                  AuthService.firebase().sendEmailVerification();
                   if (context.mounted) {
                     Navigator.of(context).pushNamed(verifyRoute);
                   }
-                } on FirebaseAuthException catch (e) {
-                  if (e.code == 'invalid-email') {
-                    if (context.mounted) {
-                      await showErrorDialog(context, 'Invalid email');
-                    }
-                  } else if (e.code == 'email-already-in-use') {
-                    if (context.mounted) {
-                      await showErrorDialog(context, 'Email already taken');
-                    }
-                  } else if (e.code == 'weak-password') {
-                    if (context.mounted) {
-                      await showErrorDialog(
-                          context, 'Weak password at least 6 characters');
-                    }
-                  } else {
-                    if (context.mounted) {
-                      await showErrorDialog(context, 'Error: ${e.code}');
-                    }
-                  }
-                } catch (e) {
-                  if (context.mounted) {
-                    await showErrorDialog(context, e.toString());
-                  }
+                } on InvalidEmailAuthException {
+                  await showErrorDialog(context, 'Invalid email');
+                } on EmailAlreadyInUseAuthException {
+                  await showErrorDialog(context, 'Email already taken');
+                } on WeakPasswordAuthException {
+                  await showErrorDialog(
+                      context, 'Weak password at least 6 characters');
+                } on GenericAuthException {
+                  await showErrorDialog(context, 'Failed Registration');
                 }
               },
               child: const Text('Register')),

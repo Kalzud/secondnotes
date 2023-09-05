@@ -1,6 +1,7 @@
 import 'package:secondnotes/services/auth/auth_user.dart';
 
 abstract class AuthProvider {
+  Future<void> initialise();
   //check if there is and auth user and then get it
   AuthUser? get currentUser;
   Future<AuthUser> logIn({
