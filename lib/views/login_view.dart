@@ -1,6 +1,4 @@
-//External imports
 import 'package:flutter/material.dart';
-//Internal imports
 import 'package:secondnotes/constants/routes.dart';
 import 'package:secondnotes/services/auth/auth_exception.dart';
 import 'package:secondnotes/services/auth/auth_service.dart';
@@ -63,7 +61,7 @@ class _LoginViewState extends State<LoginView> {
                 try {
                   final email = _email.text;
                   final password = _password.text;
-                  AuthService.firebase()
+                  await AuthService.firebase()
                       .logIn(email: email, password: password);
                   final user = AuthService.firebase().currentUser;
                   if (user?.isEmailVerified ?? false) {
@@ -78,11 +76,17 @@ class _LoginViewState extends State<LoginView> {
                     }
                   }
                 } on UserNotFoundAuthException {
-                  await showErrorDialog(context, 'User not found');
+                  if (context.mounted) {
+                    await showErrorDialog(context, 'User not found');
+                  }
                 } on WrongPasswordAuthException {
-                  await showErrorDialog(context, 'Wrong credentials');
+                  if (context.mounted) {
+                    await showErrorDialog(context, 'Wrong credentials');
+                  }
                 } on GenericAuthException {
-                  await showErrorDialog(context, 'Failed Login');
+                  if (context.mounted) {
+                    await showErrorDialog(context, 'Authentication Error');
+                  }
                 }
               },
               child: const Text('Login')),

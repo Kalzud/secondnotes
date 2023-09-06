@@ -8,7 +8,7 @@ class AuthUser {
   //creaing boolean varibale that would return true or false
   final bool isEmailVerified;
   // initialise the variable in constructor
-  const AuthUser(this.isEmailVerified);
+  const AuthUser({required this.isEmailVerified});
 
   //This factory is a constructor used to create instances of objcets and
   //in this case it is creating an instance of the objcet Auth user.
@@ -17,5 +17,6 @@ class AuthUser {
   //specified field argumnet of emailVerified from the firebase user
   //so basically creating an AuthUser object with the emailVerified from
   //User as an argument.
-  factory AuthUser.fromFirebase(User user) => AuthUser(user.emailVerified);
+  factory AuthUser.fromFirebase(User user) =>
+      AuthUser(isEmailVerified: user.emailVerified);
 }

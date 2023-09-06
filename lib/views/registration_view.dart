@@ -1,6 +1,4 @@
-//External import
 import 'package:flutter/material.dart';
-//Internal import
 import 'package:secondnotes/constants/routes.dart';
 import 'package:secondnotes/services/auth/auth_exception.dart';
 import 'package:secondnotes/services/auth/auth_service.dart';
@@ -63,21 +61,29 @@ class _RegistrationViewState extends State<RegistrationView> {
                 try {
                   final email = _email.text;
                   final password = _password.text;
-                  AuthService.firebase()
+                  await AuthService.firebase()
                       .createUser(email: email, password: password);
                   AuthService.firebase().sendEmailVerification();
                   if (context.mounted) {
                     Navigator.of(context).pushNamed(verifyRoute);
                   }
                 } on InvalidEmailAuthException {
-                  await showErrorDialog(context, 'Invalid email');
+                  if (context.mounted) {
+                    await showErrorDialog(context, 'Invalid email');
+                  }
                 } on EmailAlreadyInUseAuthException {
-                  await showErrorDialog(context, 'Email already taken');
+                  if (context.mounted) {
+                    await showErrorDialog(context, 'Email already taken');
+                  }
                 } on WeakPasswordAuthException {
-                  await showErrorDialog(
-                      context, 'Weak password at least 6 characters');
+                  if (context.mounted) {
+                    await showErrorDialog(
+                        context, 'Weak password at least 6 characters');
+                  }
                 } on GenericAuthException {
-                  await showErrorDialog(context, 'Failed Registration');
+                  if (context.mounted) {
+                    await showErrorDialog(context, 'Failed Registration');
+                  }
                 }
               },
               child: const Text('Register')),
