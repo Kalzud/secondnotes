@@ -35,6 +35,8 @@ class CouldNotDeleteUser implements Exception {}
 
 class UserAlreadyExists implements Exception {}
 
+class CouldNotFindUser implements Exception {}
+
 class NotesService {
   Database? _db;
 
@@ -99,6 +101,29 @@ class NotesService {
     );
     if (results.isNotEmpty) {
       throw UserAlreadyExists();
+    }
+    final userId = await db.insert(
+      userTable,
+      {emailColumn: email.toLowerCase()},
+    );
+    return DatabaseUser(
+      id: userId,
+      email: email,
+    );
+  }
+
+  Future<DatabaseUser> getUser({required String email}) async {
+    final db = _getDatabaseOrThrow();
+    final results = await db.query(
+      userTable,
+      limit: 1, //can only be one instance of this email in table
+      where: 'email = ?',
+      whereArgs: [email.toLowerCase()],
+    );
+    if (results.isEmpty) {
+      throw CouldNotFindUser();
+    } else {
+      return DatabaseUser.fromRow(results.first);
     }
     final userId = await db.insert(
       userTable,
