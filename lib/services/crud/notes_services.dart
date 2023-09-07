@@ -37,6 +37,10 @@ class UserAlreadyExists implements Exception {}
 
 class CouldNotFindUser implements Exception {}
 
+class CouldNotDeleteNote implements Exception {}
+
+class CouldNotFindNote implements Exception {}
+
 class NotesService {
   Database? _db;
 
@@ -125,14 +129,64 @@ class NotesService {
     } else {
       return DatabaseUser.fromRow(results.first);
     }
-    final userId = await db.insert(
+  }
+
+  Future<DatabaseNote> createNote({required DatabaseUser owner}) async {
+    final db = _getDatabaseOrThrow();
+    final dbUser = await getUser(email: owner.email);
+    //make sure owner exists in the database
+    if (dbUser != owner) {
+      throw CouldNotFindUser();
+    }
+
+    const text = '';
+    //create note
+    final noteId = await db.insert(noteTable, {
+      userIdColumn: owner.id,
+      textColumn: text,
+      isSyncedWithCloudColumn: 1,
+    });
+
+    final note = DatabaseNote(
+      id: noteId,
+      userId: owner.id,
+      text: text,
+      isSyncedWithCloud: true,
+    );
+
+    return note;
+  }
+
+  Future<void> deleteNote({required int id}) async {
+    final db = _getDatabaseOrThrow();
+    final deleteCount = await db.delete(
+      noteTable,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    if (deleteCount == 0) {
+      throw CouldNotDeleteNote();
+    }
+  }
+
+  Future<int> deleteAllNotes() async {
+    final db = _getDatabaseOrThrow();
+    return await db.delete(noteTable);
+  }
+
+  Future<DatabaseNote> getNote({required int id}) async {
+    final db = _getDatabaseOrThrow();
+    final note = await db.query(
       userTable,
-      {emailColumn: email.toLowerCase()},
+      limit: 1, //cause we getting only the one note clicked on
+      where: 'id = ?',
+      whereArgs: [id],
     );
-    return DatabaseUser(
-      id: userId,
-      email: email,
-    );
+    if (note.isEmpty) {
+      throw CouldNotFindNote();
+    } else {
+      return DatabaseNote.fromRow(note.first);
+    }
   }
 }
 
