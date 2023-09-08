@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
+import 'package:secondnotes/services/crud/crud_exception.dart';
 import 'package:sqflite/sqflite.dart';
 
 const dbName = 'notes.db';
@@ -24,22 +25,6 @@ const createNoteTable = '''CREATE TABLE IF NOT EXISTS "note" (
                                 FOREIGN KEY("user_id") REFERENCES "user"("id"),
                                 PRIMARY KEY("id" AUTOINCREMENT)
                               );''';
-
-class DatabaseAlreadyOpenedException implements Exception {}
-
-class UnableToGetDocumentDirectory implements Exception {}
-
-class DatabaseIsNotOpen implements Exception {}
-
-class CouldNotDeleteUser implements Exception {}
-
-class UserAlreadyExists implements Exception {}
-
-class CouldNotFindUser implements Exception {}
-
-class CouldNotDeleteNote implements Exception {}
-
-class CouldNotFindNote implements Exception {}
 
 class NotesService {
   Database? _db;
@@ -177,7 +162,7 @@ class NotesService {
   Future<DatabaseNote> getNote({required int id}) async {
     final db = _getDatabaseOrThrow();
     final note = await db.query(
-      userTable,
+      noteTable,
       limit: 1, //cause we getting only the one note clicked on
       where: 'id = ?',
       whereArgs: [id],
@@ -186,6 +171,30 @@ class NotesService {
       throw CouldNotFindNote();
     } else {
       return DatabaseNote.fromRow(note.first);
+    }
+  }
+
+  Future<Iterable<DatabaseNote>> getAllNotes({required int id}) async {
+    final db = _getDatabaseOrThrow();
+    final notes = await db.query(noteTable);
+    final result = notes.map((noteRow) => DatabaseNote.fromRow(noteRow));
+    return result;
+  }
+
+  Future<DatabaseNote> updateNote({
+    required DatabaseNote note,
+    required String text,
+  }) async {
+    final db = _getDatabaseOrThrow();
+    await getNote(id: note.id);
+    final updateCount = await db.update(noteTable, {
+      textColumn: text,
+      isSyncedWithCloudColumn: 0,
+    });
+    if (updateCount == 0) {
+      throw CouldNotUpdateNote();
+    } else {
+      return await getNote(id: note.id);
     }
   }
 }
