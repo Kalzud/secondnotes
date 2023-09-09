@@ -15,6 +15,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Verify Email'),
+        foregroundColor: const Color.fromARGB(246, 247, 245, 245),
         backgroundColor: Colors.deepPurple,
       ),
       body: Center(

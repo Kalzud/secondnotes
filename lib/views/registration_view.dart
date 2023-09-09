@@ -38,6 +38,7 @@ class _RegistrationViewState extends State<RegistrationView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Register'),
+        foregroundColor: const Color.fromARGB(246, 247, 245, 245),
         backgroundColor: Colors.deepPurple,
       ),
       body: Column(

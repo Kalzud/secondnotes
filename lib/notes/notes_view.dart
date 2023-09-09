@@ -31,9 +31,17 @@ class _NoteViewState extends State<NoteView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Main UI'),
+        title: const Text('Your Notes'),
+        foregroundColor: const Color.fromARGB(246, 247, 245, 245),
         backgroundColor: Colors.deepPurple,
         actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(newNoteRoute);
+            },
+            icon: const Icon(Icons.add),
+            color: const Color.fromARGB(246, 247, 245, 245),
+          ),
           PopupMenuButton<MenuAction>(
             onSelected: (value) async {
               switch (value) {
@@ -54,6 +62,7 @@ class _NoteViewState extends State<NoteView> {
                     value: MenuAction.logout, child: Text('Logout')),
               ];
             },
+            color: const Color.fromARGB(246, 247, 245, 245),
           )
         ],
       ),

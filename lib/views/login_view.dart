@@ -38,6 +38,7 @@ class _LoginViewState extends State<LoginView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login'),
+        foregroundColor: const Color.fromARGB(246, 247, 245, 245),
         backgroundColor: Colors.deepPurple,
       ),
       body: Column(
