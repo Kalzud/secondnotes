@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' show BuildContext, ModalRoute;
 
+//would be used to know if particular argument is for new or existing note
 extension GetArgument on BuildContext {
   T? getArgument<T>() {
     final modalRoute = ModalRoute.of(this);
