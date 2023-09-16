@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:secondnotes/extensions/list/filter.dart';
 import 'package:secondnotes/services/crud/crud_exception.dart';
 import 'package:sqflite/sqflite.dart';
@@ -48,6 +48,7 @@ class NotesService {
   late final StreamController<List<DatabaseNote>> _notesStreamController;
 
   Stream<List<DatabaseNote>> get allNotes =>
+      //to filter the notes bawsede on the id
       _notesStreamController.stream.filter((note) {
         final currentUser = _user;
         if (currentUser != null) {
