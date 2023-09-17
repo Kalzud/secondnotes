@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 @immutable
 class AuthUser {
   final String id;
-  final String? email;
+  final String email;
   //creaing boolean varibale that would return true or false
   final bool isEmailVerified;
   // initialise the variable in constructor
@@ -25,7 +25,7 @@ class AuthUser {
   //User as an argument.
   factory AuthUser.fromFirebase(User user) => AuthUser(
         isEmailVerified: user.emailVerified,
-        email: user.email,
+        email: user.email!,
         id: user.uid,
       );
 }
