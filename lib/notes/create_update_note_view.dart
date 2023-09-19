@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:secondnotes/services/auth/auth_service.dart';
 import 'package:secondnotes/services/cloud/cloud.note.dart';
 import 'package:secondnotes/services/cloud/firebase_cloud_storage.dart';
+import 'package:secondnotes/utilities/dialogs/cannot_send_empty_note_dialog.dart';
 import 'package:secondnotes/utilities/generics/get_argument.dart';
+import 'package:share_plus/share_plus.dart';
 
 class CreateUpdateNoteView extends StatefulWidget {
   const CreateUpdateNoteView({super.key});
@@ -93,6 +95,19 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
         title: const Text('New note'),
         foregroundColor: const Color.fromARGB(246, 247, 245, 245),
         backgroundColor: Colors.deepPurple,
+        actions: [
+          IconButton(
+            onPressed: () async {
+              final text = _textEditingController.text;
+              if (_note == null || text.isEmpty) {
+                await showCannotSendEmptyNoteDialog(context);
+              } else {
+                Share.share(text);
+              }
+            },
+            icon: const Icon(Icons.share),
+          ),
+        ],
       ),
       body: FutureBuilder(
           future: createOrGetExistingNote(context),
