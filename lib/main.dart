@@ -1,3 +1,4 @@
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:secondnotes/constants/routes.dart';
 import 'package:secondnotes/notes/create_update_note_view.dart';
@@ -104,6 +105,6 @@ class DecreamentEvent extends CounterEvent {
   const DecreamentEvent(String value) : super(value);
 }
 
-// class CounterBloc extends Bloc<>{
-
-// }
+class CounterBloc extends Bloc<CounterEvent, CounterState> {
+  CounterBloc() : super(const CounterStateValid(0));
+}
