@@ -84,7 +84,7 @@ class CounterStateValid extends CounterState {
 }
 
 class CounterStateInvalidNumber extends CounterState {
-  final int invalidValue;
+  final String invalidValue;
   const CounterStateInvalidNumber({
     required this.invalidValue,
     required int prevousValue,
@@ -106,5 +106,36 @@ class DecreamentEvent extends CounterEvent {
 }
 
 class CounterBloc extends Bloc<CounterEvent, CounterState> {
-  CounterBloc() : super(const CounterStateValid(0));
+  CounterBloc() : super(const CounterStateValid(0)) {
+    on<IncreamentEvent>((event, emit) {
+      final integer = int.tryParse(event.value);
+      if (integer == null) {
+        emit(
+          CounterStateInvalidNumber(
+            invalidValue: event.value,
+            prevousValue: state.value,
+          ),
+        );
+      } else {
+        emit(
+          CounterStateValid(state.value + integer),
+        );
+      }
+    });
+    on<DecreamentEvent>((event, emit) {
+      final integer = int.tryParse(event.value);
+      if (integer == null) {
+        emit(
+          CounterStateInvalidNumber(
+            invalidValue: event.value,
+            prevousValue: state.value,
+          ),
+        );
+      } else {
+        emit(
+          CounterStateValid(state.value - integer),
+        );
+      }
+    });
+  }
 }
