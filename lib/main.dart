@@ -1,5 +1,5 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secondnotes/constants/routes.dart';
 import 'package:secondnotes/notes/create_update_note_view.dart';
 import 'package:secondnotes/notes/notes_view.dart';
@@ -67,9 +67,76 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    _controller = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return BlocProvider(
+      create: (context) => CounterBloc(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Testing Bloc'),
+        ),
+        body: BlocConsumer<CounterBloc, CounterState>(
+          listener: (context, state) {
+            _controller.clear();
+          },
+          builder: (context, state) {
+            final invalidValue =
+                //if current state is invalid number return invalid number as string
+                (state is CounterStateInvalidNumber) ? state.invalidValue : '';
+            return Column(
+              children: [
+                Text('Current value => ${state.value}'),
+                Visibility(
+                  visible: state is CounterStateInvalidNumber,
+                  child: Text('Invalid value: $invalidValue'),
+                ),
+                TextField(
+                  controller: _controller,
+                  decoration: const InputDecoration(
+                    hintText: 'Enter a number here',
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+                Row(
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        context.read<CounterBloc>().add(
+                              DecreamentEvent(_controller.text),
+                            );
+                      },
+                      child: const Text('-'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        context.read<CounterBloc>().add(
+                              IncreamentEvent(_controller.text),
+                            );
+                      },
+                      child: const Text('+'),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
   }
 }
 
