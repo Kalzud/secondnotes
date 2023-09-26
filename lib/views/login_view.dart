@@ -42,7 +42,7 @@ class _LoginViewState extends State<LoginView> {
         if (state is AuthStateLoggedOut) {
           if (state.exception is UserNotFoundAuthException) {
             await showErrorDialog(
-                context, 'Cannot fins a user with the entered credentials');
+                context, 'Cannot find a user with the entered credentials');
           } else if (state.exception is WrongPasswordAuthException) {
             await showErrorDialog(context, 'Wrong credentials');
           } else if (state.exception is GenericAuthException) {
@@ -66,6 +66,7 @@ class _LoginViewState extends State<LoginView> {
                 controller: _email,
                 enableSuggestions: false,
                 autocorrect: false,
+                autofocus: true,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(hintText: 'Enter email here'),
               ),

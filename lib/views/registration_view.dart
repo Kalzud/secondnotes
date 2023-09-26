@@ -42,7 +42,7 @@ class _RegistrationViewState extends State<RegistrationView> {
         if (state is AuthStateRegistering) {
           if (state.exception is InvalidEmailAuthException) {
             await showErrorDialog(context, 'Invalid email');
-          } else if (state.exception is WrongPasswordAuthException) {
+          } else if (state.exception is WeakPasswordAuthException) {
             await showErrorDialog(
                 context, 'Weak password at least 6 characters');
           } else if (state.exception is EmailAlreadyInUseAuthException) {
@@ -62,10 +62,13 @@ class _RegistrationViewState extends State<RegistrationView> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
+              const Text(
+                  'Please enter an email and password to register and be able to create notes'),
               TextField(
                 controller: _email,
                 enableSuggestions: false,
                 autocorrect: false,
+                autofocus: true,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(hintText: 'Enter email here'),
               ),
