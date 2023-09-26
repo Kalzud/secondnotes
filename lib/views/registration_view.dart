@@ -58,43 +58,46 @@ class _RegistrationViewState extends State<RegistrationView> {
           foregroundColor: const Color.fromARGB(246, 247, 245, 245),
           backgroundColor: Colors.deepPurple,
         ),
-        body: Column(
-          children: [
-            TextField(
-              controller: _email,
-              enableSuggestions: false,
-              autocorrect: false,
-              keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(hintText: 'Enter email here'),
-            ),
-            TextField(
-              controller: _password,
-              enableSuggestions: false,
-              autocorrect: false,
-              obscureText: true,
-              decoration:
-                  const InputDecoration(hintText: 'Enter Password here'),
-            ),
-            TextButton(
-                onPressed: () {
-                  final email = _email.text;
-                  final password = _password.text;
-                  context.read<AuthBloc>().add(
-                        AuthEventRegister(
-                          email,
-                          password,
-                        ),
-                      );
-                },
-                child: const Text('Register')),
-            TextButton(
-                onPressed: () {
-                  context.read<AuthBloc>().add(
-                        const AuthEventLogout(),
-                      );
-                },
-                child: const Text('Aready have an account? Login here')),
-          ],
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              TextField(
+                controller: _email,
+                enableSuggestions: false,
+                autocorrect: false,
+                keyboardType: TextInputType.emailAddress,
+                decoration: const InputDecoration(hintText: 'Enter email here'),
+              ),
+              TextField(
+                controller: _password,
+                enableSuggestions: false,
+                autocorrect: false,
+                obscureText: true,
+                decoration:
+                    const InputDecoration(hintText: 'Enter Password here'),
+              ),
+              TextButton(
+                  onPressed: () {
+                    final email = _email.text;
+                    final password = _password.text;
+                    context.read<AuthBloc>().add(
+                          AuthEventRegister(
+                            email,
+                            password,
+                          ),
+                        );
+                  },
+                  child: const Text('Register')),
+              TextButton(
+                  onPressed: () {
+                    context.read<AuthBloc>().add(
+                          const AuthEventLogout(),
+                        );
+                  },
+                  child: const Text('Aready have an account? Login here')),
+            ],
+          ),
         ),
       ),
     );
